@@ -1,0 +1,23 @@
+# .github/workflows/release.yml
+name: Release
+
+on:
+  pull_request_target:
+    types: [closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    if: github.event.pull_request.merged
+    
+    steps:
+    - name: Calver Release
+      uses: StephaneBour/actions-calver@master
+      id: calver
+      with:
+        date_format: "%Y-%m-%d"
+        release: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
