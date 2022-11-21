@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 import sys
 import json
 from subprocess import check_output, CalledProcessError
