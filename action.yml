@@ -16,7 +16,6 @@ inputs:
     description: 'When a hotfix is merged, open a PR to mainline'
     required: true
     default: "true"
-
 outputs:
   release-number: # id of output
     description: 'The release number, if successful'
