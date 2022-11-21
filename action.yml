@@ -23,4 +23,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.pr-number }} ${{ inputs.version-scheme }} ${{ inputs.mainline-branch }} ${{ inputs.create-prs-for-hotfixes-to-mainline }}
+    - ${{ inputs.pr-number }}
+    - ${{ inputs.version-scheme }}
+    - ${{ inputs.mainline-branch }}
+    - ${{ inputs.create-prs-for-hotfixes-to-mainline }}
