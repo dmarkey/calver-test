@@ -15,8 +15,7 @@ inputs:
   create-prs-for-hotfixes-to-mainline:
     description: 'When a hotfix is merged, open a PR to mainline'
     required: true
-    default: true
-
+    default: "true"
 
 outputs:
   release-number: # id of output
