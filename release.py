@@ -1,11 +1,11 @@
-import os
+#!/bin/python3
 import sys
 import json
 from subprocess import check_output, CalledProcessError
 from time import strftime
 
 
-def attempt_hotfix_release(version, release_branch):
+def attempt_hotfix_release(version, release_branch, mainline_branch, create_prs_for_hotfixes_to_mainline=True):
     check_output(
         ["gh", "release", "create", version, "--target", release_branch, "--generate-notes", "-t",
          f"Automated Hotfix Release {version}"])
@@ -30,7 +30,7 @@ def attempt_standard_release(release_branch, version_prefix, iterate_minor=True)
             return
 
 
-def release(pr_number, version_scheme, mainline_branch):
+def release(pr_number, version_scheme, mainline_branch, create_prs_for_hotfixes_to_mainline):
     result = check_output(["gh", "pr", "view", pr_number, "-c", "--json", "baseRefName,comments,labels,mergedAt"])
     result_parsed = json.loads(result)
     if result_parsed['mergedAt'] is None:
@@ -49,11 +49,13 @@ def release(pr_number, version_scheme, mainline_branch):
         hotfix_branch = result_parsed['baseRefName']
         hotfix_version = "".join(hotfix_branch.split("-")[1:])
         print(f"Attempting for branch {result_parsed['baseRefName']}, version {hotfix_version}")
-        attempt_hotfix_release(hotfix_version, hotfix_branch)
+        attempt_hotfix_release(hotfix_version, hotfix_branch, mainline_branch,
+                               create_prs_for_hotfixes_to_mainline=create_prs_for_hotfixes_to_mainline)
 
 
 if __name__ == "__main__":
-    _version_scheme = os.environ.get("VERSION_SCHEME", "%Y.%j")
-    _mainline_branch = os.environ.get("MAINLINE_BRANCH", "main")
     _pr_number = sys.argv[1]
-    release(_pr_number, _version_scheme, _mainline_branch)
+    _version_scheme = sys.argv[2]
+    _mainline_branch = sys.argv[3]
+    _create_prs_for_hotfixes_to_mainline = sys.argv[4]
+    release(_pr_number, _version_scheme, _mainline_branch, _create_prs_for_hotfixes_to_mainline)
