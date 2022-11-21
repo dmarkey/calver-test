@@ -31,6 +31,7 @@ def attempt_standard_release(release_branch, version_prefix, iterate_minor=True)
 
 
 def release(pr_number, version_scheme, mainline_branch, create_prs_for_hotfixes_to_mainline):
+    check_output(["git", "config", "--global", "--add", "safe.directory", "/github/workspace"])
     result = check_output(["gh", "pr", "view", pr_number, "-c", "--json", "baseRefName,comments,labels,mergedAt"])
     result_parsed = json.loads(result)
     if result_parsed['mergedAt'] is None:
